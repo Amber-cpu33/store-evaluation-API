@@ -10,3 +10,9 @@
 ### 🚀 快速啟動
 1. 安裝環境：`pip install -r requirements.txt`
 2. 啟動服務：`uvicorn main:app --reload`
+
+### 📊 API 回傳格式範例
+成功推論後會回傳如下結構，包含位點評分與 SHAP 影響力分析：
+- `score`: 綜合評分 (0-100)
+- `report`: 展店建議
+- `shap_values`: 各項特徵對分數的貢獻度
