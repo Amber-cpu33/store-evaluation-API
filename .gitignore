@@ -1,0 +1,7 @@
+*.json
+service_account_key.json
+*.onnx
+*.pkl
+*.model
+__pycache__/
+.env
