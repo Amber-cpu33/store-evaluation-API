@@ -4,6 +4,13 @@
 
 > 運用 Vibe Coding 製作。
 
+🌐 **線上體驗**：https://conveniencestore-analysis-ml.web.app
+
+| | URL |
+|---|---|
+| **前端** | https://conveniencestore-analysis-ml.web.app |
+| **後端 API** | https://store-prediction-service-776185979298.asia-east1.run.app |
+
 ---
 
 ## ✨ 主要功能
@@ -125,7 +132,7 @@ npx ng serve
 
 ---
 
-## v1.0 → v2.0 改動 (使用Cluade Vibe Coding)
+## v1.0 → v2.0 改動 (使用 Claude Vibe Coding)
 
 - 架構重組：扁平 → `back-end/` + `front-end/` 分離
 - 資料載入：CSV 逐次讀取 → 啟動時全部載入記憶體
@@ -133,3 +140,6 @@ npx ng serve
 - AI 洞察改為 SSE 串流（逐字輸出）
 - 同品牌 vs 同類競爭精確計算
 - 多店切換瀏覽同里所有門市
+- 地址模式 Geo 快取（Google Maps + NLSC 不重複呼叫）
+- 前端預測結果快取（同地址+品牌直接回傳）
+- 後端部署 Cloud Run、前端部署 Firebase Hosting
