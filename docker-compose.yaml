@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  front-end:
+    build: ./front-end/angular
+    container_name: front-end
+    restart: always
+    environment:
+      - TZ=Asia/Taipei
+    ports:
+      - "4200:4200"
+    depends_on:
+      - back-end
+
+  back-end:
+    build: ./back-end
+    container_name: back-end
+    restart: always
+    environment:
+      - TZ=Asia/Taipei
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
+    ports:
+      - "8000:8000"
