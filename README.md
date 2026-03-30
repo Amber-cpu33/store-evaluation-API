@@ -125,7 +125,7 @@ npx ng serve
 
 ---
 
-## v1.0 → v2.0 主要改動
+## v1.0 → v2.0 改動 (使用Cluade Vibe Coding)
 
 - 架構重組：扁平 → `back-end/` + `front-end/` 分離
 - 資料載入：CSV 逐次讀取 → 啟動時全部載入記憶體
