@@ -4,17 +4,22 @@ from data import loader
 from core.geocoding import address_to_coords, coords_to_village
 from core.distance import get_nearest_store, get_nearest_popular_spot, count_stores_within_500m
 
+# 地理快取：同一地址不重複呼叫 Google Maps / NLSC API
+_geo_cache: dict[str, tuple] = {}
+
 
 async def build_features_from_address(address: str, is_cvs: int, company_name: str) -> dict:
     """
     地址 → 完整特徵值 dict（供 predictor.predict 使用）
     流程：地址 → 座標 → 里別 → 查表 + 距離計算
     """
-    # 1. 地址 → 座標
-    lat, lon = await address_to_coords(address)
-
-    # 2. 座標 → 縣市/行政區/里別（國土測繪 API）
-    village_info = await coords_to_village(lat, lon)
+    # 1+2. 地址 → 座標 → 里別（優先從快取取）
+    if address in _geo_cache:
+        lat, lon, village_info = _geo_cache[address]
+    else:
+        lat, lon = await address_to_coords(address)
+        village_info = await coords_to_village(lat, lon)
+        _geo_cache[address] = (lat, lon, village_info)
     city = village_info['縣市']
     district = village_info['行政區']
     neighborhood = village_info['里別']

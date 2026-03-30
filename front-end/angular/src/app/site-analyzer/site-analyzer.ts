@@ -132,6 +132,7 @@ export class SiteAnalyzerComponent implements OnInit {
       }
       this.showResult = false;
       this.isLoading = true;
+      this.aiInsightText = '分析中...';
       this.cdr.detectChanges();
       await this.generateResult();
       this.isLoading = false;
@@ -167,6 +168,7 @@ export class SiteAnalyzerComponent implements OnInit {
       }
       this.displayDistrict = this.prediction.location?.district ?? '';
       this.displayNeighborhood = this.prediction.location?.neighborhood ?? '';
+      this.currentBrandName = this.selectedBrandName;
       this.aiInsightText = this.prediction.aiInsight;
     } else {
       this.prediction = await this.predictionService.runPrediction(this.selectedCity, this.selectedDistrict, this.selectedNeighborhood, this.selectedBrand, this.currentStoreIndex);

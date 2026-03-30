@@ -6,6 +6,8 @@ import { MedianIncome } from "../value-objects/income";
 import { Radar } from "../value-objects/radar";
 
 export class PredictionService {
+    private addressCache = new Map<string, IPrediction>();
+
     // 執行查表預測
     async runPrediction(city: string, district: string, neighborhood: string, brand: string, storeIndex: number = 0): Promise<IPrediction> {
         try {
@@ -35,6 +37,10 @@ export class PredictionService {
 
     // 即時地址查詢
     async runPredictionByAddress(address: string, brand_name: string): Promise<IPrediction> {
+        const cacheKey = `${address}__${brand_name}`;
+        if (this.addressCache.has(cacheKey)) {
+            return this.addressCache.get(cacheKey)!;
+        }
         try {
             const response = await fetch(`${BACK_END_URL}/predict-by-address`, {
                 method: 'POST',
@@ -43,7 +49,7 @@ export class PredictionService {
             });
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
-            return new Prediction(
+            const result = new Prediction(
                 new Operation(data.operation.score, data.operation.report),
                 new TotalPopulation(data.totalPopulation.neighborhood, data.totalPopulation.district),
                 new MedianIncome(data.medianIncome.neighborhood, data.medianIncome.district),
@@ -53,6 +59,8 @@ export class PredictionService {
                 data.isSuccess,
                 data.location
             );
+            this.addressCache.set(cacheKey, result);
+            return result;
         } catch (error) {
             console.error("無法執行地址預測:", error);
             return new Prediction(new Operation(0, ""), new TotalPopulation(0, 0), new MedianIncome(0, 0), 0, "", new Radar([], []), false);
