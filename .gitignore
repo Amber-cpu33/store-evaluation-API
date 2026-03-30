@@ -1,0 +1,17 @@
+# 環境變數（含 API keys）
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Node / Angular
+front-end/angular/node_modules/
+front-end/angular/.angular/
+front-end/angular/dist/
+
+# 系統
+.DS_Store
+Thumbs.db

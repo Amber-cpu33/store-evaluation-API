@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pandas
+numpy<2.0.0
+xgboost==1.7.6
+shap
+onnxruntime
+langchain
+langchain-google-genai
+httpx
