@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 import numpy as np
+import pickle
+import os
 from config import FULL_DATA_PATH, POPULAR_LOCATIONS_PATH, COMPANY_TO_BRAND
 
 # ==========================================
@@ -28,9 +30,35 @@ popular_spots: list = []
 
 def load_all():
     """容器啟動時呼叫，載入所有靜態資料至記憶體"""
+    cache_path = os.path.join(os.path.dirname(__file__), 'full_data_v1.4.pkl')
+
+    if os.path.exists(cache_path):
+        try:
+            with open(cache_path, 'rb') as f:
+                cache = pickle.load(f)
+                globals().update(cache)
+            print(f"✅ 從快取載入：{len(store_locations)} 筆營運中店家 | {len(popular_spots)} 筆熱鬧據點")
+            return
+        except Exception as e:
+            print(f"⚠️ 快取讀取失敗，重新生成：{e}")
+
     _load_store_data()
     _load_popular_spots()
-    print(f"✅ 記憶體查表載入完成：{len(store_locations)} 筆營運中店家 | {len(popular_spots)} 筆熱鬧據點")
+
+    try:
+        cache = {
+            'geo_tree': geo_tree,
+            'neighborhood_lookup': neighborhood_lookup,
+            'district_lookup': district_lookup,
+            'prediction_lookup': prediction_lookup,
+            'store_locations': store_locations,
+            'popular_spots': popular_spots,
+        }
+        with open(cache_path, 'wb') as f:
+            pickle.dump(cache, f)
+        print(f"✅ 記憶體查表載入完成（已快取）：{len(store_locations)} 筆營運中店家 | {len(popular_spots)} 筆熱鬧據點")
+    except Exception as e:
+        print(f"⚠️ 快取生成失敗，但資料已載入：{e}")
 
 
 def _load_store_data():

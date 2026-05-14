@@ -6,6 +6,10 @@ __pycache__/
 *.pyc
 *.pyo
 .pytest_cache/
+back-end/venv/
+
+# 資料檔案
+back-end/data/*.csv
 
 # Node / Angular
 front-end/angular/node_modules/
