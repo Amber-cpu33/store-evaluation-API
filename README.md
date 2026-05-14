@@ -176,10 +176,6 @@ npx ng serve
 ### UI 改善
 - 初次啟動時提示「需等待 5-10 秒讀取資料」
 
-### Bug 修復
-- ✅ 修正 Google Maps API 環境變數設置（分離 GEMINI_API_KEY 與 GOOGLE_MAPS_API_KEY）
-- ✅ 地址模式 Geocoding 恢復正常
-
 ### 驗證結果
 - ✅ CSV vs Pickle 資料完全一致（939 筆熱鬧據點）
 - ✅ 距離計算邏輯驗證無誤
