@@ -164,7 +164,9 @@ npx ng serve
 - 前端預測結果快取（同地址+品牌直接回傳）
 - 後端部署 Cloud Run、前端部署 Firebase Hosting
 
-## 最近優化 (2026-05-14)
+---
+
+## 🚀 最近優化 (2026-05-14)
 
 ### 啟動速度優化
 - **Pickle 快取**：預生成 `full_data_v1.4.pkl` (1.81 MB)，取代 CSV 逐行讀取
@@ -172,12 +174,16 @@ npx ng serve
 - **預期冷啟動**：~7.17s → ~6.2s（減少 ~1 秒）
 
 ### 容器優化
-- 新增 `.dockerignore`，排除 CSV 檔案
+- 新增 `.dockerignore`，排除 CSV 檔案從容器鏡像
 - 容器鏡像更小、啟動更快
 
 ### UI 改善
 - 初次啟動時提示「需等待 5-10 秒讀取資料」
 
 ### Bug 修復
-- 修正 Google Maps API 環境變數設置（分離 GEMINI_API_KEY 與 GOOGLE_MAPS_API_KEY）
-- 地址模式 Geocoding 恢復正常
+- ✅ 修正 Google Maps API 環境變數設置（分離 GEMINI_API_KEY 與 GOOGLE_MAPS_API_KEY）
+- ✅ 地址模式 Geocoding 恢復正常
+
+### 驗證結果
+- ✅ CSV vs Pickle 資料完全一致（939 筆熱鬧據點）
+- ✅ 距離計算邏輯驗證無誤
