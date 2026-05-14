@@ -12,3 +12,6 @@ data/*.csv
 *.md
 .DS_Store
 test_*.py
+front-end/angular/node_modules/
+front-end/angular/.angular/
+front-end/angular/dist/
