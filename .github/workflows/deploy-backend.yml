@@ -1,0 +1,45 @@
+name: Deploy Backend to Cloud Run
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'back-end/fastapi/**' # 只有後端程式碼變動時才觸發
+
+env:
+  PROJECT_ID: conveniencestore-analysis-ml
+  REGION: asia-east1                     # 台灣機房
+  SERVICE_NAME: store-backend-service     # 你剛更新的服務名稱
+  ARTIFACT_REPO: cloudrun-repos          # Artifact Registry 的存放區名稱
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Authorize Docker
+        run: gcloud auth configure-docker asia-east1-docker.pkg.dev
+
+      - name: Build and Push Container
+        run: |
+          docker build -t asia-east1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} ./back-end/fastapi
+          docker push asia-east1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image asia-east1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
+            --region ${{ env.REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars "BUCKET_NAME=conveniencestore-analysis-ml-bucket,GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}"
